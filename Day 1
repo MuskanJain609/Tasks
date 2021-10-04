@@ -1,0 +1,70 @@
+HTTP/1.1 vs HTTP/2
+
+Hypertext Transfer Protocol (HTTP) is an application protocol that is used to exchange information between the client and remote/local web server. HTTP is a communication standard for the World Wide Web. In this process, a client sends a request to the server with the help of a method like GET or POST, and in response, the server sends resources back to the client. 
+
+Delivery Models
+HTTP/1.1 retrieves resources using persistent connections and pipelining. HTTP/1.1 keeps the Transmission Control Protocol (TCP) connection open until it is forced to close, this helps in rendering a full webpage instead of making additional requests to gather information. When multiple data packets are traveling to the same destination they cannot pass each other, this is why a request at the head of the queue can block all the resources until it receives all the required resources by it. This is referred to as Head-of-Line (HOL) Blocking.
+In HTTP/2, the binary framing layer encodes the request/response and cuts them into smaller packets of information which improves the flexibility of data transfer. Due to a process known as multiplexing, requests and responses can run in parallel without blocking the data packets behind them. Multiplexing resolves the Head-of-Line issue of HTTP/1.1 by ensuring that the messages need to wait for another to finish.
+The binary framing layer organizes messages into parallel streams, so when a client sends concurrent requests to a server, it can prioritize the responses by assigning the weight between 1 to 256 to each stream. The higher number indicates higher priority. 
+
+Compression
+In HTTP/1.1, Data such as HTTP messages, CSS files, and JavaScript files were compressed by programs like gzip to decrease the size but the header was sent as plain text. Due to the uncompressed data, the weight of requests was heavier on the connection.
+In HTTP/2 the data can be split into header frame and data frame, which makes header compression easy using the HPACK compression program. This resulted in a faster response.
+
+Server Push
+In HTTP/1.1, whenever a client wants multiple resources, the client needs to make multiple TCP connections. In HTTP/2, Server push capability allows the server to anticipate and send the additional cacheable data with the requested one, so that if the client wants to use the resource, it is already available to use. The cached data can be reused on multiple pages which improve the latency.
+
+JavaScript Objects and its internal Representation
+
+JavaScript Objects are referenced from real-life objects, just like other programming languages. The object contains properties and types. We can take the example of a Car as an object, the properties can be color, design, brand name, year, etc. Similarly, in JavaScript, objects can have properties that determine their qualities. Properties of an object can be understood the same as JavaScript variables but they are attached to objects. We can use simple dot-notation to access an object’s properties:
+	objectName.propertyName;
+We can create an object and give its properties some value as shown below:
+	var car = new Object();
+	car.color = “Black”;
+	car.brand = “Maruti Suzuki”;
+	car.year = “2012”;
+We can also keep some unassigned properties and the value will be undefined:
+	car.design;    //undefined
+
+Creation of JavaScript Object
+
+With Object literal:
+let car = {name: “Maruti Suzuki”,color: “Black”,year: “2012”};
+
+With Constructor:
+function Car(brand, color){
+	this.brand=brand;
+	this.color=color;
+}
+let car1 = new Car(“Maruti Suzuki”, “Black”);
+let car2 = new Car(“Mahindra”, “Red”);
+
+With new Keyword:
+var car = new Object();
+car.brand = “Maruti Suzuki”;
+car.color = “Black”;
+
+With Object.create method:
+var Car = {
+	type: “Sedan”;				//default values
+	displayType: function(){		//Method to display type
+		console.log(this.type);
+	}
+};
+var car1 = Object.create(Car);	//Create new Car Object
+car1.displayType();				//Output is Sedan
+var car2 = Object.create(Car);	//Create new Car Object
+car2.type = “Hatchback”;			
+car2.displayType();				//Output is Hatchback
+
+
+
+JavaScript’s Internal Representation of Objects
+
+Most objects store all of their properties in a single memory block (“a” and “b”). Every memory block contains a pointer to a map that describes its structure. Overflow arrays (“c”, and “d”) are typically used to store named properties that do not fit in an object. Numbered properties are typically stored separately, in a contiguous array.
+
+The JavaScript standard allows developers to define objects in a very flexible manner, and it is difficult to devise an efficient representation that works for everything. An object is fundamentally a collection of properties: key-value pairs. There are two types of expressions that can be used to access properties:
+obj.prop
+obj[“prop”]
+Property names, according to the specification, are always strings. If you use a name that isn't a string, it's automatically converted to one. This may come as a surprise: if you use a number as a property name, it is also converted to a string (at least according to the spec). As a result, values can be stored at negative or fractional array indices. As a result, a JavaScript object is essentially a map from strings to values.
+
